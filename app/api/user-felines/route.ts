@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { prisma } from '../../lib/prisma';
 
 export async function GET() {
     /**
@@ -60,8 +61,18 @@ export async function POST(request: NextRequest) {
                 { status: 500 }
             );
         }
+
+        const { id, url } = data
+        
+        const cat = await prisma.cat.create({
+            data: {
+                id,
+                url
+            }
+        })
+
         return NextResponse.json(
-            { message: "Image uploaded successfully", data },
+            { message: "Image uploaded successfully", data, cat },
             { status: 200 }
         );
     } catch (error) {
