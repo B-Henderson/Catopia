@@ -1,4 +1,6 @@
 // Fetcher for SWR and mutations
+// if there is a payload it will contain the method and body
+// if there is no payload default to GET
 export async function fetcher(url: string, payload?: { method?: string, body?: string }) {
   const options = {
     method: payload?.method || "GET",

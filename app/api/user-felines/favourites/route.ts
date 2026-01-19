@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 
 export async function GET() {
+    /**
+     * Get all favourites for the user
+     */
     try {
         const response = await fetch(`https://api.thecatapi.com/v1/favourites`, {
             headers: {
@@ -38,16 +41,22 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
+    /**
+     * Add a favourite for the user
+     * @param image_id id of the image to add to favourites
+     * @param sub_id id of the user to add the favourite for to keep track of who added it
+     */
     try {
         const { image_id, sub_id } = await request.json();
 
+        // if there's no image_id, return 400
         if (!image_id) {
             return NextResponse.json(
                 { message: "No image_id provided." },
                 { status: 400 }
             );
         }
-
+        
         const response = await fetch(`https://api.thecatapi.com/v1/favourites`, {
             headers: {
                 "x-api-key": process.env.CAT_API_KEY as string,

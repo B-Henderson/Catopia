@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
+    /**
+     * Get all votes for the user
+     */
     try {
         const response = await fetch("https://api.thecatapi.com/v1/votes", {
             headers: {
@@ -32,9 +35,17 @@ export async function GET() {
 export async function POST(
     request: NextRequest
 ) {
+    /**
+     * Create a vote for the user
+     * @param vote_id id of the vote to delete
+     * @param value value of the vote (1 for like, -1 for dislike, 0 for remove)
+     * @param image_id id of the image to vote on
+     * @param sub_id id of the user to vote for
+     */
     try {
         const { vote_id, value, image_id, sub_id } = await request.json();
 
+        // if there's no value, return 400
         if (value === undefined || value === null) {
             return NextResponse.json(
                 { message: "You must provide a value" },

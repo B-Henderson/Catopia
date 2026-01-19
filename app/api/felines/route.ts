@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 export const dynamic = "force-static";
 export const revalidate = 3600;
 
+// currently unused route, this is a route that provides random cat images
+// from the cat api
+
 export async function GET() {
     /**
      * Fetch route, fetches 10 random images from the cat api paginated

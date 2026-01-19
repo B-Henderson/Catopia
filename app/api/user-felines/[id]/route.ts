@@ -44,7 +44,10 @@ export async function GET(
     request: NextRequest,
     { params }: { params: Promise<{ id: string }> }
 ) {
-
+    /**
+     * Get images uploaded by the user
+     * @param id id of the user to get images for
+     */
     try {
         // get images uploaded by sub_id
         const { id } = await params;
