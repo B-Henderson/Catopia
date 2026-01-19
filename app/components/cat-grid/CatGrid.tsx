@@ -1,7 +1,5 @@
 'use client'
 import Image from 'next/image'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faThumbsUp, faThumbsDown } from "@fortawesome/free-solid-svg-icons"
 
 import { CatGridProps } from "./CatGrid.interface"
 import { LikeBar } from "./like-bar/LikeBar"
@@ -27,43 +25,50 @@ export function CatGrid({cats, likes, onVoteChange, onFavouriteChange, favourite
                 const userVote = username 
                     ? catLikes.find(like => like.sub_id.toLowerCase() === username.toLowerCase())
                     : null
-                
-                const userFavourite = favourites.find((favourite) => favourite.image.id === cat.id && favourite.sub_id === username);
+
+                const userFavourite = username
+                    ? favourites.find(
+                        (favourite) =>
+                            favourite.image.id === cat.id &&
+                            favourite.sub_id &&
+                            favourite.sub_id.toLowerCase() === username.toLowerCase()
+                    )
+                    : null;
 
                 return (
-                    <div key={cat.id} className="border relative rounded-lg p-4 bg-white dark:bg-zinc-900 min-h-[335px]">
-                        <Favourite catId={cat.id} favouriteId={userFavourite?.id} onFavouriteChange={onFavouriteChange} />
-                        <div className="relative w-full h-48 mb-2 rounded overflow-hidden">
+                    <div key={cat.id} className="relative rounded-xl p-4 bg-gray-100 min-h-[305px] shadow-lg hover:shadow-xl transition-shadow duration-200 border border-gray-200">
+                        <Favourite
+                            catId={cat.id}
+                            favouriteId={userFavourite?.id}
+                            onFavouriteChange={onFavouriteChange}
+                        />
+                        <div className="relative w-full h-64 sm:h-96 md:h-72 lg:h-48 xl:h-56 2xl:h-72 mb-2 rounded-lg overflow-hidden shadow-sm">
                             <Image 
                                 src={cat.url} 
                                 alt={cat.id} 
                                 fill
                                 className="object-cover"
-                                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                                sizes="(max-width: 767px) 100vw, (max-width: 1023px) calc(50vw - 1rem), calc(25vw - 0.75rem)"
                                 fetchPriority="high" 
                                 loading="eager" 
                                 placeholder="blur"
+                                objectFit="cover"
+                                objectPosition="center"
                                 blurDataURL={"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP0ifOpBwADawF3MXO9DQAAAABJRU5ErkJggg=="}
                             />
                         </div>
-                        <div className="flex flex-col gap-2">
-                            <div className="flex justify-between items-start">
-                                <div className="flex flex-col gap-1 w-full">
-                                    <div className="text-sm font-semibold">
-                                        Score: <span className={totalScore >= 0 ? 'text-green-600' : 'text-red-600'}>{totalScore}</span>
-                                    </div>
-                                    <div className="text-xs text-gray-600 dark:text-gray-400 w-full text-center">
-                                        <FontAwesomeIcon icon={faThumbsUp} /> {likesCount} | <FontAwesomeIcon icon={faThumbsDown} /> {dislikesCount} ({catLikes.length} total)
-                                    </div>
-                                </div>
-                            </div>
+                        <div className="flex flex-col gap-2 mt-6">
                             <LikeBar 
                                 imageId={cat.id} 
                                 currentVote={userVote ? { id: parseInt(userVote.id), value: userVote.value } : null}
                                 onVoteChange={onVoteChange}
+                                likesCount={likesCount}
+                                dislikesCount={dislikesCount}
+                                totalCount={catLikes.length}
+                                totalScore={totalScore}
                             />
                             {<div
-                                className="text-xs text-gray-600 dark:text-gray-400 text-center"
+                                className="text-xs text-gray-600 text-center"
                             >
                                 uploaded by {(username?.toLowerCase() === cat.sub_id?.toLowerCase() ? 'You' : cat.sub_id) || 'Anonymous'}
                             </div>}

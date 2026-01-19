@@ -57,34 +57,24 @@ export function UsernameModal({ onUsernameChange, mutateLikes, mutateFavourites 
   if (isLoading) {
     return (
       <div className="flex items-center gap-2">
-        <span className="text-sm text-gray-600 dark:text-gray-400">Loading...</span>
+        <span className="text-sm text-gray-600">Loading...</span>
       </div>
     )
   }
 
   if (!isOpen) {
     return (
-      <div className="flex items-center gap-2">
-        <span className="text-sm text-gray-600 dark:text-gray-400">
-          User: <span className="font-semibold text-gray-900 dark:text-gray-100">{username}</span>
-        </span>
-        <button
-          onClick={handleChange}
-          className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
-        >
-          Change
-        </button>
-      </div>
+      <></>
     )
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white dark:bg-zinc-900 rounded-lg p-6 max-w-md w-full mx-4 shadow-xl">
-        <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+    <div className="fixed inset-0 backdrop-blur-md bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white  rounded-lg p-6 max-w-md w-full mx-4 shadow-xl">
+        <h2 className="text-xl font-bold text-gray-900 mb-4">
           Set Your Username
         </h2>
-        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+        <p className="text-sm text-gray-600 mb-4">
           Choose a username to identify your votes and uploads. This will be stored in your browser session.
         </p>
         <form onSubmit={handleSubmit}>
@@ -93,8 +83,8 @@ export function UsernameModal({ onUsernameChange, mutateLikes, mutateFavourites 
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             placeholder="Enter username"
-            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg
-              bg-white dark:bg-zinc-800 text-gray-900 dark:text-gray-100
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg
+              bg-white text-gray-900
               focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
             autoFocus
             required
@@ -104,9 +94,9 @@ export function UsernameModal({ onUsernameChange, mutateLikes, mutateFavourites 
           <div className="flex gap-2">
             <button
               type="submit"
+              aria-label="Save username"
               className="flex-1 px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg
-                hover:bg-blue-700 transition-colors duration-200
-                dark:bg-blue-500 dark:hover:bg-blue-600"
+                hover:bg-blue-700 transition-colors duration-200"
             >
               Save Username
             </button>
@@ -114,8 +104,9 @@ export function UsernameModal({ onUsernameChange, mutateLikes, mutateFavourites 
               <button
                 type="button"
                 onClick={() => setIsOpen(false)}
-                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg
-                  text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800
+                aria-label="Cancel"
+                className="px-4 py-2 border border-gray-300 rounded-lg
+                  text-gray-700 hover:bg-gray-50
                   transition-colors duration-200"
               >
                 Cancel
