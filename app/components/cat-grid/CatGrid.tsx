@@ -10,7 +10,7 @@ export function CatGrid({cats, likes, onVoteChange, onFavouriteChange, favourite
     const { username } = useUsername()
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {cats.map((cat) => {
+            {cats.map((cat, index) => {
                 // Create an array of all likes that match the current cat image
                 const catLikes = likes.filter((like) => like.image_id === cat.id);
                 const { totalScore, likesCount, dislikesCount } = catLikes.reduce(
@@ -49,8 +49,9 @@ export function CatGrid({cats, likes, onVoteChange, onFavouriteChange, favourite
                                 fill
                                 className="object-cover"
                                 sizes="(max-width: 767px) 100vw, (max-width: 1023px) calc(50vw - 1rem), calc(25vw - 0.75rem)"
-                                fetchPriority="high" 
-                                loading="eager" 
+                                preload={index === 0}
+                                fetchPriority={index === 0 ? 'high' : 'auto'}
+                                quality={85}
                                 placeholder="blur"
                                 objectFit="cover"
                                 objectPosition="center"

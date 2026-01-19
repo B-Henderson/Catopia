@@ -5,6 +5,10 @@ export async function DELETE(
     request: NextRequest,
     { params }: { params: Promise<{ id: string }> }
 ) {
+    /**
+     * Delete a favourite for the user
+     * @param id id of the favourite to delete
+     */
     try {
         const {id} = await params;
         
