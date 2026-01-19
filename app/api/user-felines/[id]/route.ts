@@ -34,7 +34,7 @@ export async function DELETE(
         );
     } catch (error) {
         return NextResponse.json(
-            { message: "Error deleting image", error: error },
+            { message: "Error deleting image" },
             { status: 500 }
         );
     }
@@ -69,10 +69,11 @@ export async function GET(
         )
         
     } catch (error) {
+        console.error("Error retrieving user images:", error);
         return NextResponse.json(
-            { message: "Error retriving user images", error: error },
-            {status: 500}
-        )
+            { message: "Error retrieving user images" },
+            { status: 500 }
+        );
     }
 
 

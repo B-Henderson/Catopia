@@ -29,8 +29,9 @@ export async function GET() {
             { status: 200 }
         );        
     } catch (error) {
+        console.error("Error fetching favourites:", error);
         return NextResponse.json(
-            { message: "Error fetching favourites", error: error },
+            { message: "Error fetching favourites" },
             { status: 500 }
         );
     }
@@ -38,8 +39,7 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
     try {
-        const body = await request.json();
-        const { image_id } = body;
+        const { image_id, sub_id } = await request.json();
 
         if (!image_id) {
             return NextResponse.json(
@@ -55,7 +55,8 @@ export async function POST(request: NextRequest) {
             },
             method: "POST",
             body: JSON.stringify({
-                image_id
+                image_id,
+                sub_id
             })
         });
 
@@ -72,8 +73,9 @@ export async function POST(request: NextRequest) {
             { status: 200 }
         );
     } catch (error) {
+        console.error("Error adding favourite:", error);
         return NextResponse.json(
-            { message: "Oops something went wrong, try again later.", error: error },
+            { message: "Oops something went wrong, try again later." },
             { status: 500 }
         );
     }
