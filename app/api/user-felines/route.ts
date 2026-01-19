@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
     /**
      * Get user uploaded cats
      */
     try {
-        const response = await fetch("https://api.thecatapi.com/v1/images?limit=10&page=0&size=med", {
+        const page = request.nextUrl.searchParams.get('page') || 0;
+
+        // TODO reduce limit and add pagination?
+
+        const response = await fetch(`https://api.thecatapi.com/v1/images?limit=100&page=${page}&size=small`, {
             headers: {
                 "x-api-key": process.env.CAT_API_KEY as string,
             },
@@ -44,10 +48,22 @@ export async function POST(request: NextRequest) {
      */
     try {
         const formData = await request.formData();
+        const file = formData.get('file') as File | null;
+        
+        // Check if the file is an image
+        if (!file || !file.type.startsWith('image/')) {
+            return NextResponse.json(
+                { message: "File must be an image" },
+                { status: 400 }
+            );
+        }
+        
+        const subId = formData.get('sub_id') as string || process.env.CAT_API_USER;
+        
         const response = await fetch("https://api.thecatapi.com/v1/images/upload", {
             headers: {
                 "x-api-key": process.env.CAT_API_KEY as string,
-                "sub_id": process.env.CAT_API_USER as string
+                "sub_id": subId ? subId.toLowerCase() : undefined as unknown as string
             },
             method: "POST",
             body: formData,

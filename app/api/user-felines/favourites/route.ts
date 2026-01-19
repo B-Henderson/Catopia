@@ -38,8 +38,7 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
     try {
-        const body = await request.json();
-        const { image_id } = body;
+        const { image_id, sub_id } = await request.json();
 
         if (!image_id) {
             return NextResponse.json(
@@ -55,7 +54,8 @@ export async function POST(request: NextRequest) {
             },
             method: "POST",
             body: JSON.stringify({
-                image_id
+                image_id,
+                sub_id
             })
         });
 
