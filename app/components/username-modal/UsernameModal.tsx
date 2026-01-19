@@ -1,13 +1,15 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import type { KeyedMutator } from 'swr'
 
-import { useUsername } from '../../lib/hooks/useUsername'
+import { useUsername } from '@/app/lib/hooks/useUsername'
+import type { LikesApiResponse, FavouritesApiResponse } from '@/app/types'
 
 interface UsernameModalProps {
   onUsernameChange?: () => void
-  mutateLikes?: (data?: any, options?: { revalidate?: boolean }) => Promise<any>
-  mutateFavourites?: (data?: any, options?: { revalidate?: boolean }) => Promise<any>
+  mutateLikes?: KeyedMutator<LikesApiResponse>
+  mutateFavourites?: KeyedMutator<FavouritesApiResponse>
 }
 
 export function UsernameModal({ onUsernameChange, mutateLikes, mutateFavourites }: UsernameModalProps) {

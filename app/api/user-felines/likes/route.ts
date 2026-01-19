@@ -11,7 +11,7 @@ export async function GET() {
         
         if (!response.ok) {
             return NextResponse.json(
-                { message: "Failed to votes" },
+                { message: "Failed to fetch votes" },
                 { status: 500 }
             );
         }
@@ -91,8 +91,9 @@ export async function POST(
             const voteData = await postResponse.json();
 
             if (!postResponse.ok) {
+                console.error("Failed to create vote:", voteData);
                 return NextResponse.json(
-                    { message: "Something went wrong, try again later.", error: voteData },
+                    { message: "Something went wrong, try again later." },
                     { status: 500 }
                 );
             }
@@ -110,7 +111,7 @@ export async function POST(
     } catch (error) {
         console.error("Error handling vote:", error);
         return NextResponse.json(
-            { message: "Error processing vote", error: error },
+            { message: "Error processing vote" },
             { status: 500 }
         );
     }

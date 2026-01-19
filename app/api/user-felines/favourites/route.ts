@@ -29,8 +29,9 @@ export async function GET() {
             { status: 200 }
         );        
     } catch (error) {
+        console.error("Error fetching favourites:", error);
         return NextResponse.json(
-            { message: "Error fetching favourites", error: error },
+            { message: "Error fetching favourites" },
             { status: 500 }
         );
     }
@@ -72,8 +73,9 @@ export async function POST(request: NextRequest) {
             { status: 200 }
         );
     } catch (error) {
+        console.error("Error adding favourite:", error);
         return NextResponse.json(
-            { message: "Oops something went wrong, try again later.", error: error },
+            { message: "Oops something went wrong, try again later." },
             { status: 500 }
         );
     }

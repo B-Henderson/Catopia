@@ -58,13 +58,18 @@ export async function POST(request: NextRequest) {
             );
         }
         
-        const subId = formData.get('sub_id') as string || process.env.CAT_API_USER;
+        const subId = (formData.get('sub_id') as string | null) || process.env.CAT_API_USER;
+        
+        const headers: Record<string, string> = {
+            "x-api-key": process.env.CAT_API_KEY as string,
+        };
+        
+        if (subId) {
+            headers["sub_id"] = subId.toLowerCase();
+        }
         
         const response = await fetch("https://api.thecatapi.com/v1/images/upload", {
-            headers: {
-                "x-api-key": process.env.CAT_API_KEY as string,
-                "sub_id": subId ? subId.toLowerCase() : undefined as unknown as string
-            },
+            headers,
             method: "POST",
             body: formData,
         });
@@ -82,8 +87,9 @@ export async function POST(request: NextRequest) {
             { status: 200 }
         );
     } catch (error) {
+        console.error("Error uploading image:", error);
         return NextResponse.json(
-            { message: "Error uploading image", error: error },
+            { message: "Error uploading image" },
             { status: 500 }
         );
     }
