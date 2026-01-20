@@ -6,7 +6,8 @@ import useSWR from 'swr'
 import { fetcher } from '../../utils/fetcher'
 
 // useApi hook for GET, POST and DELETE requests through swr
-export function useApi<T>(url: string | null) {
+// Supports string URLs or array keys (e.g., ['/api/endpoint', username]) for reactive fetching
+export function useApi<T>(url: string | string[] | null) {
   const { data, error, isLoading, mutate } = useSWR<T>(url, fetcher)
 
   const mutateApi = useCallback(async (

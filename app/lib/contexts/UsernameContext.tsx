@@ -1,5 +1,9 @@
 'use client'
 
+// after updating the data fetching logic with swr this probably doesn't need to be usecontext
+// and could probably just swap to using the username hook
+// TODO: investigate this
+
 import { createContext, useContext, useState, useEffect, useEffectEvent, ReactNode } from 'react'
 
 const USERNAME_KEY = 'catopia_username'

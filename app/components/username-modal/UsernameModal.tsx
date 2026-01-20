@@ -1,18 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import type { KeyedMutator } from 'swr'
 
 import { useUsername } from '@/app/lib/hooks/useUsername'
-import type { LikesApiResponse, FavouritesApiResponse } from '@/app/types'
 
-interface UsernameModalProps {
-  onUsernameChange?: () => void
-  mutateLikes?: KeyedMutator<LikesApiResponse>
-  mutateFavourites?: KeyedMutator<FavouritesApiResponse>
-}
-
-export function UsernameModal({ onUsernameChange, mutateLikes, mutateFavourites }: UsernameModalProps) {
+export function UsernameModal() {
   const { username, setUsername, isLoading } = useUsername()
   const [inputValue, setInputValue] = useState('')
   const [isOpen, setIsOpen] = useState(false)
@@ -28,24 +20,9 @@ export function UsernameModal({ onUsernameChange, mutateLikes, mutateFavourites 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (inputValue.trim()) {
-      const newUsername = inputValue.trim()
-      const usernameChanged = newUsername !== username
-      setUsername(newUsername)
+      setUsername(inputValue.trim())
       setIsOpen(false)
       setInputValue('')
-      // Trigger callback after state update using setTimeout to ensure state has updated
-      if (usernameChanged) {
-        // Use setTimeout to ensure username state has updated before revalidating
-        setTimeout(() => {
-          if (mutateLikes) {
-            mutateLikes(undefined, { revalidate: true })
-          }
-          if (mutateFavourites) {
-            mutateFavourites(undefined, { revalidate: true })
-          }
-          onUsernameChange?.()
-        }, 0)
-      }
     }
   }
 
