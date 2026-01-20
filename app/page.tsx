@@ -1,7 +1,5 @@
 'use client'
 
-import { useCallback, useEffect, useRef } from 'react'
-
 import { useApi } from './lib/hooks/useApi'
 import { CatGrid } from './components/cat-grid/CatGrid'
 import { UsernameModal } from './components/username-modal/UsernameModal'
@@ -12,53 +10,23 @@ import { CatsApiResponse, LikesApiResponse, FavouritesApiResponse } from './type
 export default function Home() {
   const { username } = useUsername()
   
+  // SWR automatically revalidates when username changes (conditional fetching: https://swr.vercel.app/docs/conditional-fetching)
+  // When username is null, the key becomes null and SWR won't fetch (conditional fetching)
+  // also prevents getting data on initial render before a username is set
+  // this avoid the flashing of data behind the blur background
   const { data: cats, isLoading, error, mutate: mutateCats } =
-    useApi<CatsApiResponse>('/api/user-felines')
+    useApi<CatsApiResponse>(username ? ['/api/user-felines', username] : null)
   
   const { data: likes, mutate: mutateLikes } =
-    useApi<LikesApiResponse>('/api/user-felines/likes')
+    useApi<LikesApiResponse>(username ? ['/api/user-felines/likes', username] : null)
   
   const { data: favourites, mutate: mutateFavourites } =
-    useApi<FavouritesApiResponse>('/api/user-felines/favourites')
-
-  const handleUsernameChange = useCallback(() => {
-    // Likes and Favourites aren't being revalidated on username change
-    // so force a revalidation
-    mutateCats(undefined, { revalidate: true })
-    mutateLikes(undefined, { revalidate: true })
-    mutateFavourites(undefined, { revalidate: true })
-  }, [mutateCats, mutateLikes, mutateFavourites])
-
-  // Track previous username to detect actual changes
-  const prevUsernameRef = useRef<string | null>(null)
-
-  // Watch for username changes and trigger revalidation only when it actually changes
-  useEffect(() => {
-    if (prevUsernameRef.current === null) {
-      prevUsernameRef.current = username
-      return
-    }
-
-    // Only revalidate if username actually changed
-    if (prevUsernameRef.current !== username && username) {
-      mutateCats(undefined, { revalidate: true })
-      mutateLikes(undefined, { revalidate: true })
-      mutateFavourites(undefined, { revalidate: true })
-      prevUsernameRef.current = username
-    } else if (prevUsernameRef.current !== username) {
-      // Username was cleared
-      prevUsernameRef.current = username
-    }
-  }, [username, mutateCats, mutateLikes, mutateFavourites])
+    useApi<FavouritesApiResponse>(username ? ['/api/user-felines/favourites', username] : null)
   
   return (
     <div className="min-h-screen bg-gray-200 font-sans">
       <main className="container mx-auto pt-4 pb-8 px-4">
-        <UsernameModal
-          onUsernameChange={handleUsernameChange}
-          mutateLikes={mutateLikes}
-          mutateFavourites={mutateFavourites}
-        />
+        <UsernameModal />
         {isLoading ?
           <div>Loading cats...</div>
           : error
